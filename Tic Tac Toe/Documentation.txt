@@ -1,0 +1,111 @@
+
+<===========This is the JS code. First we declare all the variables or stuff needed in the program.===========>
+
+
+
+
+The data items that play audio:
+
+	let music = new Audio("music.mp3");             //constantly playing music in the back.
+	let audioTurn = new Audio("ting.mp3");		//Whenever someone takes turn.
+	let gameover = new Audio("gameover.mp3");	//When game is over.
+
+Now the variables needed:
+
+	let turn = "X"; 				//we will change this turn to 0 and X in game. 
+	let isgameover = false;				//This will be used to decide whether the game is over or not
+
+
+
+
+<============================ Now we write the the main logic of the game.===================================>
+
+let divbox = document.getElementsByClassName("box");      		//Here "box" is the class given to the 9 divs acting 
+									as the main container for the "X" and "0".
+
+Array.from("divbox").forEach(element =>					//Collecting each div as an element in an Array using 
+									forEach then at each element listening for click event 
+									then adding the respective "X" or "0" there.	 
+					
+{
+	let spanboxtext = element.querySelector(".boxtext");
+	element.addEventListener('click', () =>
+	{
+		if(spanboxtext.innerText === '')
+		{
+			spanboxtext.innerText = turn;
+			turn = changeTurn();       	    //changeTurn function here to change from "X" to "0" or vice versa
+			audioTurn.play();
+			checkWin();                         //checkWin function called to check whether someone has won or not
+							    			
+			if(isgameover = false)
+			{
+				document.getElementbyClassName("info")[0].innerText = "Turn for " + turn;
+			}			
+		}
+	})
+})
+
+
+
+
+			<changeTurn Function>
+const changeTurn = () => 
+{
+	return turn === "X"?"0":"X"; 
+} 
+
+
+
+			<checkWin Function>
+const checkWin = ()=>
+{
+
+    let boxtexts = document.getElementsByClassName('boxtext');
+    let wins = 
+    [
+        [0,1,2,1,4,0],
+        [3,4,5,1,12,0],
+        [6,7,8,1,20,0],
+        [0,3,6,-7,12,90],
+        [1,4,7,1,12,90],
+        [2,5,8,9,12,90],
+        [0,4,8,1,12,45],
+        [2,4,6,1,12,135],
+    ]
+    wins.forEach(e =>
+    {
+        if((boxtexts[e[0]].innerText === boxtexts[e[1]].innerText) && (boxtexts[e[2]].innerText === boxtexts[e[1]].innerText) && (boxtexts[e[0]].innerText !== "") )
+        {
+            document.querySelector('.info').innerText = boxtexts[e[0]].innerText + " Won";
+            isgameover= true;
+            document.querySelector('.imgbox').getElementsByTagName('img')[0].style.width = "50px";
+            document.querySelector(".line").style.transform =   `translate(${e[3]}vw,${e[4]}vw) rotate(${e[5]}deg)`;
+
+            document.querySelector(".line").style.width = "22vw";
+        }
+    })
+}
+
+			  <reset button Function>
+
+reset.addEventListener('click',()=>{
+    let boxtexts = document.querySelectorAll('.boxtext');
+    Array.from(boxtexts).forEach(element=> {
+        element.innerText = ""
+        
+    });  
+    turn = "X"
+    isgameover = false
+    document.getElementsByClassName("info")[0].innerText = "Turn for " + turn;
+    document.querySelector('.imgbox').getElementsByTagName('img')[0].style.width = "0px";
+    document.querySelector(".line").style.width = "0vw";
+})
+
+
+
+
+
+
+
+
